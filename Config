@@ -2,6 +2,9 @@
 #       (Sedov, L. I., 1959, Similarity and Dimensional Methods
 #       in Mechanics [New York:  Academic])
 
+# setup BuildAkram -auto -2d +cylindrical -objdir=BuildAkram -nxb=16 -nyb=16 -maxblocks=1000 UseBdryVar=true
+
+
 REQUIRES Driver
 REQUIRES physics/Hydro
 REQUIRES physics/Eos
