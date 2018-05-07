@@ -1,0 +1,176 @@
+#	Runtime parameters for the Sedov explosion problem.
+
+#	Parameters for initial model
+
+#		Ambient pressure and density, explosion energy, initial
+#		location of explosion source
+
+sim_rhoAmbient	= 1.172358
+sim_tempAmbient = 300.0
+
+# electrode dimensions
+sim_exl = 0.0
+sim_exu = 0.5e-3 # electrode radius is changed
+sim_eyl = -1.e-3
+sim_eyu = 1.e-3
+
+# plasma dimensions
+sim_pxl = 0.0
+#sim_pxu = 0.1e-3 # plasma radius
+sim_pxu = 0.3e-3
+sim_pyl = -1.e-3
+sim_pyu = 1.e-3
+
+sim_vx  = 0.0
+sim_vy  = 0.0
+sim_vz  = 0.0
+
+# Specify file from which to read initial / analytical profile, or "/dev/null" for none:
+sim_profFileName        = "/dev/null"
+
+#		Gas ratio of specific heats
+
+gamma           = 1.4
+
+#	Computational volume parameters
+
+#		Grid dimensionality and geometry
+
+geometry = "cylindrical"
+
+#		Size of computational volume
+
+xmin		= 0.
+xmax		= 6.e-3
+ymin		= -4.5e-3
+ymax		= 4.5e-3
+
+#		Boundary conditions
+
+##xl_boundary_type = "reflect"
+xl_boundary_type = "axisymmetric"
+xr_boundary_type = "outflow"
+
+yl_boundary_type = "outflow"
+yr_boundary_type = "outflow"
+
+
+#	Simulation time, I/O  parameters
+
+cfl		= 0.8
+basenm          = "sedov_"
+restart         = .false.
+
+
+#	checkpoint file output parameters
+checkpointFileIntervalTime = 2.0
+#checkpointFileIntervalStep = 5000
+checkpointFileNumber = 0
+
+#	plotfile output parameters
+plotfileIntervalTime = 0.2e-6
+#plotfileIntervalStep = 20
+plotfileNumber = 0
+
+ignoreForcedPlot = .true.
+
+nend            = 1000000
+tmax            = 40.e-6
+#dtMax           = 5.e-9
+
+run_comment     = "ESD Plasma"
+log_file        = "esd.log"
+eintSwitch     = 0.2e-6
+
+plot_var_1 = "dens"
+plot_var_2 = "pres"
+plot_var_3 = "temp"
+plot_var_4 = "ener"
+plot_var_5 = "velx"
+plot_var_6 = "vely"
+
+#  Adaptive Grid refinement parameters
+lrefine_max     = 1 
+refine_var_1 = "dens"
+refine_var_2 = "temp"
+
+
+# Uniform Grid specific parameters 
+# see note below for more explanation
+
+iGridSize = 200   #global number of gridpoints along x, excluding gcells
+jGridSize = 200   #global number of gridpoints along y, excluding gcells
+kGridSize = 1
+iProcs = 1	#num procs in i direction
+jProcs = 1	#num procs in j direction
+kProcs = 1
+
+
+# When using UG, iProcs, jProcs and kProcs must be specified.
+# These are the processors along each of the dimensions
+#FIXEDBLOCKSIZE mode ::
+# When using fixed blocksize, iGridSize etc are redundant in
+# runtime parameters. These quantities are calculated as 
+# iGridSize = NXB*iprocs
+# jGridSize = NYB*jprocs
+# kGridSize = NZB*kprocs
+#NONFIXEDBLOCKSIZE mode ::
+# iGridSize etc must be specified. They constitute the global
+# number of grid points in the physical domain without taking 
+# the guard cell into account. The local blocksize is calculated
+# as iGridSize/iprocs  etc.
+ 
+ 
+## -------------------------------------------------------------##
+##  SWITCHES SPECIFIC TO THE UNSPLIT HYDRO SOLVER               ##
+#	I. INTERPOLATION SCHEME:
+order		= 3      # Interpolation order (first/second/third/fifth order)
+slopeLimiter    = "mc"   # Slope limiters (minmod, mc, vanLeer, hybrid, limited)
+LimitedSlopeBeta= 1.     # Slope parameter for the "limited" slope by Toro
+charLimiting	= .true. # Characteristic limiting vs. Primitive limiting
+
+use_avisc	= .true. # use artificial viscosity (originally for PPM)
+cvisc		= 0.1     # coefficient for artificial viscosity
+use_flattening	= .false. # use flattening (dissipative) (originally for PPM)
+use_steepening	= .false. # use contact steepening (originally for PPM)
+use_upwindTVD	= .false. # use upwind biased TVD slope for PPM (need nguard=6)
+
+#	II. RIEMANN SOLVERS:
+RiemannSolver	= "Roe"       # Roe, HLL, HLLC, LLF, Marquina
+entropy         = .false.     # Entropy fix for the Roe solver
+
+#	III. STRONG SHOCK HANDLING SCHEME:
+shockDetect	= .false.     # Shock Detect for numerical stability
+## -------------------------------------------------------------##
+
+## ---------------------------------------------------------------##
+##  SWITCHES SPECIFIC TO THE SUPER-TIME-STEPPING (STS) ALGORITHM  ##
+##  NOTE: For details on using STS runtime parameters, please     ##
+##        refer to user's guide (Driver chapter).                 ##
+useSTS                  = .false.
+nstepTotalSTS           = 5
+nuSTS                   = 0.2
+## ---------------------------------------------------------------##
+
+##  SI Units 
+pc_unitsBase = "MKS"
+
+# eos mode
+##eosMode = "dens_temp"
+eosModeInit = "dens_temp"
+# molecular weight of dry air in kg/mol
+eos_singleSpeciesA = .02896
+
+gr_pmrpNboundaries = 18
+
+# switch for the source term
+usePlasmaPR = .true.
+useJouleHeating = .true.
+useRadiationCooling = .true.
+
+# turn the conductivity on
+#useConductivity = .false.
+#useDiffuse = .false.
+#useDiffuseTherm = .false.
+#useDiffuseComputeDtTherm = .false. # always off to avoid very small timesteps
+
